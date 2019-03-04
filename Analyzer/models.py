@@ -1,5 +1,5 @@
 from django.db import models
-
+import datetime
 # Create your models here.
 
 class user_profile(models.Model):
@@ -17,7 +17,7 @@ class user_profile(models.Model):
 
 class general_expenses(models.Model):
     T_id=models.AutoField(primary_key=True)
-    Email=models.ForeignKey(user_profile,  on_delete=models.CASCADE,)
+    #Email=models.ForeignKey(user_profile,  on_delete=models.CASCADE,)
     amount=models.IntegerField()
     categories=(
     (1,'Food'),
@@ -35,8 +35,9 @@ class general_expenses(models.Model):
         return str(self.T_id )
 
 class mandatory_expenses(models.Model):
-    T_id=models.IntegerField(primary_key=True)
-    Email=models.ForeignKey(user_profile, on_delete=models.CASCADE,)
+    T_id=models.AutoField(primary_key=True)
+    #Email=models.ForeignKeypytho(user_profile, on_delete=models.CASCADE,)
+    date = models.DateField( default=datetime.date.today)
     amount=models.IntegerField()
     categories=(
     (1,'Food9'),
@@ -50,7 +51,7 @@ class mandatory_expenses(models.Model):
     category=models.IntegerField(choices=categories)
     remarks=models.CharField(max_length=264)
     def __str__(self):
-        return self.name
+        return str(self.amount)
 
 class debts(models.Model):
     T_id=models.IntegerField(primary_key=True)
