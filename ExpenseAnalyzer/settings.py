@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Expense_Analyzer',
         'USER' : 'root',
-        'PASSWORD' : '',
+        'PASSWORD' : 'root123',
         'HOST' : 'localhost',
         'PORT' : '3306',
     }

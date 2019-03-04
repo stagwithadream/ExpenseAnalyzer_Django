@@ -16,11 +16,11 @@ class user_profile(models.Model):
         return self.name
 
 class general_expenses(models.Model):
-    T_id=models.IntegerField(primary_key=True)
+    T_id=models.AutoField(primary_key=True)
     Email=models.ForeignKey(user_profile,  on_delete=models.CASCADE,)
     amount=models.IntegerField()
     categories=(
-    (1,'Food9'),
+    (1,'Food'),
     (2,'Travel'),
     (3,'Groceries'),
     (4, 'Electronics'),
@@ -32,7 +32,7 @@ class general_expenses(models.Model):
     remarks=models.CharField(max_length=264)
 
     def __str__(self):
-        return self.name
+        return str(self.T_id )
 
 class mandatory_expenses(models.Model):
     T_id=models.IntegerField(primary_key=True)

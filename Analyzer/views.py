@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from Analyzer.models import user_profile, general_expenses, mandatory_expenses, debts
+from . import models
+from . import forms
 # Create your views here.
 
 def dashboard(request):
@@ -26,7 +27,17 @@ def notification(request):
     return render(request,'examples/notification.html')
 
 def addExpense(request):
-    return render(request,'examples/AddExpense.html')
+    form=forms.addExpense_form()
+    my_form={'form':form}
+
+    if request.method=="POST":
+            form=forms.addExpense_form(request.POST)
+
+            if form.is_valid():
+                form.save()
+                return dashboard(request)
+
+    return render(request,'examples/AddExpense.html',my_form)
 
 def addMoney(request):
     return render(request,'examples/AddMoney.html')
