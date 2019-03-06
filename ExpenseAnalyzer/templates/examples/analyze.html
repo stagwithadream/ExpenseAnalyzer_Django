@@ -1,18 +1,57 @@
 {% extends './base_template.html' %}
 
 {% block content %}
+<style tyle="javascript/css">
+  .canvasjs-chart-tooltip{
+    right: auto !important;
+    left: 20px !important;
+    top: 10px !important;
+    bottom: auto !important;
+  }
+  .form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+  }
 
+  .form-inline label {
+    margin: 5px 10px 5px 0;
+  }
+
+  .form-inline input {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+
+
+  .form-inline button:hover {
+    background-color: royalblue;
+  }
+
+  @media (max-width: 800px) {
+    .form-inline input {
+      margin: 10px 0;
+    }
+
+    .form-inline {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
 
 <div class="container" style="margin:auto; margin-top:10px;">
 <h2>Analyze and Compare your expenditures</h2>
-
+{{allData}}
 <div>
-  <div class="row">
+  <div>
   <h6>Categories</h6>
-  <div class="custom-select col-xs-4" style="width:200px; margin:10px; padding:10px;">
-    <form>
-      <div class="form-group">
-    <select>
+  <div class="row" style="padding:10px;">
+    <form class="form-inline">
+    <select multiple name="category[]" id="cat" onChange="updateGraph()">
       <option value="0">Food</option>
       <option value="1">Travel</option>
       <option value="2">Groceries</option>
@@ -20,22 +59,16 @@
       <option value="4">Clothing and Footwear</option>
       <option value="5">Household</option>
       <option value="6">Others</option>
-    </select>
-    </div>
-    <div class="form-group" style="float:right">
-      <label for="from">From</label>
+      <option value="7" selected>Total</option>
+    </select> &nbsp; &nbsp;
+    <label for="from">  From: </label>
     <input type="date" class="form-control" name="from"></input>
-    </div>
-    <div class="form-group" style="float:right">
-      <label for="to">To</label>
+    <label for="to"> To: </label>
     <input type="date" class="form-control" name="to"></input>
-    </div>
-    <div class="form-group" style="float:right">
     <button type="submit" class="btn btn-primary" name="submit">Submit</Button>
-    </div>
     </form>
   </div>
-  <div id="graph" class="col-xs-8" style="float:right; height:600px"></div>
+  <div id="graph" class="row" style="margin:auto; height:500px; width:90%"></div>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </div>
 </div>
@@ -43,6 +76,7 @@
 </div>
 
 <script>
+  var catg=document.getElementById('cat');
   window.onload(updateGraph())
 function updateGraph() {
 
@@ -53,64 +87,85 @@ var chart = new CanvasJS.Chart("graph", {
 		text: "Expenses"
 	},
 	axisY:{
-		includeZero: true
+		includeZero: true,
 	},
+  axisX:{
+    interval: 1,
+  },
+  toolTip:{
+    enabled: true,
+  },
+  legend: {
+       horizontalAlign: "right",
+       verticalAlign: "center",
+     },
 	data: [{
 		type: "line",
-		dataPoints: [
-			{ x: 2, y: 450 },
-			{ x: 3, y: 414},
-			{ x: 4, y: 520},
-			{ y: 460 },
-			{ y: 450 },
-			{ y: 500 },
-			{ y: 480 },
-			{ y: 480 },
-			{ y: 410 },
-			{ y: 500 },
-			{ y: 480 },
-			{ y: 510 }
-		]
+    name: "Food",
+    showInLegend: true,
+    visible: document.getElementById('cat')[0].selected,
+  	dataPoints:
+        {{ food | safe}}
 	},
   {
 		type: "line",
-		dataPoints: [
-			{ y: 550 },
-			{ y: 514},
-			{ y: 520},
-			{ y: 120 },
-			{ y: 340 },
-			{ y: 300 },
-			{ y: 290 },
-			{ y: 900 },
-			{ y: 120 },
-			{ y: 780 },
-			{ y: 890 },
-			{ y: 600 }
-		]
+    name: "Travel",
+    showInLegend: true,
+    visible: document.getElementById('cat')[1].selected,
+		dataPoints:
+    {{ travel | safe }}
 	},
   {
 		type: "line",
-		dataPoints: [
-			{ y: 580 },
-			{ y: 614},
-			{ y: 620},
-			{ y: 620 },
-			{ y: 640 },
-			{ y: 600 },
-			{ y: 290 },
-			{ y: 900 },
-			{ y: 120 },
-			{ y: 780 },
-			{ y: 890 },
-			{ y: 600 }
-		]
-	}
-  ]
-});
+    name: "Groceries",
+    showInLegend: true,
+    visible: document.getElementById('cat')[2].selected,
+		dataPoints:
+    {{ Groceries | safe }}
+	},
+  {
+		type: "line",
+    name: "Electronics",
+    showInLegend: true,
+    visible: document.getElementById('cat')[3].selected,
+		dataPoints:
+    {{ Electronics | safe }}
+	},
+  {
+		type: "line",
+    name: "Clothing",
+    showInLegend: true,
+    visible: document.getElementById('cat')[4].selected,
+		dataPoints:
+    {{ Clothing | safe }}
+	},
+  {
+		type: "line",
+    name: "Household",
+    showInLegend: true,
+    visible: document.getElementById('cat')[5].selected,
+		dataPoints:
+    {{ Household | safe }}
+	},
+  {
+		type: "line",
+    name: "Others",
+    showInLegend: true,
+    visible: document.getElementById('cat')[6].selected,
+		dataPoints:
+    {{ Other | safe }}
+	},
+  {
+		type: "line",
+    name: "Total",
+    showInLegend: true,
+    visible: document.getElementById('cat')[7].selected,
+		dataPoints:
+    {{ all | safe }}
+	}]
+  });
 chart.render();
 
 }
 </script>
-
 {% endblock %}
