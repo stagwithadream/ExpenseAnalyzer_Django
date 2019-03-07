@@ -4,7 +4,7 @@ from Analyzer.models import user_profile, general_expenses, mandatory_expenses, 
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
-from Analyzer.forms import registerform,loginform,generalexpensesform
+from Analyzer.forms import registerform,loginform,generalexpensesform,mandExpense_form
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Sum
@@ -87,7 +87,21 @@ def debts(request):
     return render(request,'examples/debts.html')
 
 def mandatory(request):
-    return render(request,'examples/mandatory.html')
+    mandForm=mandExpense_form()
+    mand_form={'Mandform':mandForm}
+
+    if request.method=='POST':
+        mandForm=mandExpense_form(request.POST)
+        userr=User.objects.filter(username=request.session['username'])
+        for u in userr:
+            id=u.id
+        if mandForm.is_valid():
+            user=mandForm.save(commit=False)
+            user.user_id_id=id
+            user.save()
+        return dashboard(request)
+
+    return render(request,'examples/mandatory.html',mand_form)
 
 def analyze(request):
     dateFrom=datetime.datetime.min
