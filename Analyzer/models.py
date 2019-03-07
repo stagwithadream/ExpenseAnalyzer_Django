@@ -49,7 +49,7 @@ class mandatory_expenses(models.Model):
     user_id=models.ForeignKey(User,  on_delete=models.CASCADE,)
     amount=models.IntegerField()
     categories=(
-    (1,'Food9'),
+    (1,'Food'),
     (2,'Travel'),
     (3,'Groceries'),
     (4, 'Electronics'),
