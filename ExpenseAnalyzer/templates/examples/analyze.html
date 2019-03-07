@@ -50,7 +50,8 @@
   <div>
   <h6>Categories</h6>
   <div class="row" style="padding:10px;">
-    <form class="form-inline">
+    <form class="form-inline" method="POST" action="{% url 'analyze'%}">
+      {% csrf_token %}
     <select multiple name="category[]" id="cat" onChange="updateGraph()">
       <option value="0">Food</option>
       <option value="1">Travel</option>
@@ -62,9 +63,9 @@
       <option value="7" selected>Total</option>
     </select> &nbsp; &nbsp;
     <label for="from">  From: </label>
-    <input type="date" class="form-control" name="from"></input>
+    <input type="date" class="form-control" name="from" value="{{ dateFrom }}"></input>
     <label for="to"> To: </label>
-    <input type="date" class="form-control" name="to"></input>
+    <input type="date" class="form-control" name="to" value="{{ dateTo }}"></input>
     <button type="submit" class="btn btn-primary" name="submit">Submit</Button>
     </form>
   </div>

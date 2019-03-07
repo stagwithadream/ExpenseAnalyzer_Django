@@ -90,6 +90,12 @@ def mandatory(request):
     return render(request,'examples/mandatory.html')
 
 def analyze(request):
+    dateFrom=datetime.datetime.min
+    dateTo=datetime.datetime.now()
+    if request.method=="POST":
+        dateFrom=request.POST.get('from')
+        dateTo=request.POST.get('to')
+    assert dateFrom < dateTo, 'Start datetime must be before end datetime'
     userr=User.objects.filter(username=request.session['username']);
     for i in userr:
         id=i.id
@@ -101,32 +107,32 @@ def analyze(request):
     houseData=[]
     otherData=[]
     allData=[]
-    food=general_expenses.objects.filter(user_id=id).filter(category='1').order_by('date_time')
+    food=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='1').order_by('date_time')
     for f in food:
         foodData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
     # return HttpResponse(foodData)
-    travel=general_expenses.objects.filter(user_id=id).filter(category='2').order_by('date_time')
+    travel=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='2').order_by('date_time')
     for d in travel:
         travelData.append({'x' : d.date_time.month , 'y' : d.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    groceries=general_expenses.objects.filter(user_id=id).filter(category='3').order_by('date_time')
+    groceries=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='3').order_by('date_time')
     for f in groceries:
         groceriesData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    electronics=general_expenses.objects.filter(user_id=id).filter(category='4').order_by('date_time')
+    electronics=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='4').order_by('date_time')
     for f in electronics:
         elecData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    cloth=general_expenses.objects.filter(user_id=id).filter(category='5').order_by('date_time')
+    cloth=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='5').order_by('date_time')
     for f in cloth:
         clothData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    house=general_expenses.objects.filter(user_id=id).filter(category='6').order_by('date_time')
+    house=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='6').order_by('date_time')
     for f in house:
         houseData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    other=general_expenses.objects.filter(user_id=id).filter(category='7').order_by('date_time')
+    other=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='7').order_by('date_time')
     for f in other:
         otherData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    all=general_expenses.objects.filter(user_id=id).order_by('date_time')
+    all=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).order_by('date_time')
     for f in all:
         allData.append({'x' : f.date_time.month , 'y' : f.amount, 'toolTipContent' : f.date_time.strftime('%c') + ': {y}'  })
-    return render(request,'examples/analyze.html',{'food':foodData, 'travel' : travelData , 'Groceries' : groceriesData , 'Electronics' : elecData , 'Clothing' : clothData , 'Household' : houseData , 'Other' : otherData, 'all' : allData})
+    return render(request,'examples/analyze.html',{'food':foodData, 'travel' : travelData , 'Groceries' : groceriesData , 'Electronics' : elecData , 'Clothing' : clothData , 'Household' : houseData , 'Other' : otherData, 'all' : allData,'dateFrom' : dateFrom , 'dateTo' : dateTo})
 
 
 def notification(request):
