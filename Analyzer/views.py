@@ -87,7 +87,17 @@ def debts(request):
     return render(request,'examples/debts.html')
 
 def mandatory(request):
-    return render(request,'examples/mandatory.html')
+    mandForm=forms.mandExpense_form()
+    mand_form={'Mandform':mandForm}
+
+    if request.method=='POST':
+        mandForm=forms.mandExpense_form(request.post)
+
+        if mandForm.is_valid():
+            mandForm.save()
+        return dashboard(request)
+
+    return render(request,'examples/mandatory.html',mand_form)
 
 def analyze(request):
     return render(request,'examples/analyze.html')

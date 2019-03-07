@@ -90,3 +90,8 @@ class generalexpensesform(forms.ModelForm):
 	 	model=general_expenses
 	 	fields=('amount','category','remarks')
 	 	# exclude = ["user_id","T_id","date_time"]
+
+class mandExpense_form(forms.ModelForm):
+    class Meta():
+        model=models.mandatory_expenses
+        fields="amount","category","remarks","date"
