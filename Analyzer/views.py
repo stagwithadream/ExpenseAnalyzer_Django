@@ -8,6 +8,7 @@ from Analyzer.forms import registerform,loginform,generalexpensesform
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Sum
+import datetime
 # Create your views here.
 
 
@@ -102,7 +103,8 @@ def addExpense(request):
            id=u.id
        if form.is_valid():
            user=form.save(commit=False)
-           user.userid_id=id
+           user.user_id_id=id
+           user.date_time=datetime.datetime.now()
            user.save()
            message="Successfully Added"
            form=generalexpensesform()
