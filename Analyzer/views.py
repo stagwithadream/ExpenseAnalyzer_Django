@@ -4,10 +4,11 @@ from Analyzer.models import user_profile, general_expenses, mandatory_expenses, 
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
-from Analyzer.forms import registerform,loginform
+from Analyzer.forms import registerform,loginform,generalexpensesform
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Sum
+import datetime
 # Create your views here.
 
 
@@ -57,6 +58,7 @@ def dashboard(request):
         if all['amount__sum'] is not None:
             allExpense[i-1]=all['amount__sum']
     return render(request,'examples/dashboard.html',{'food':foodData, 'travel' : travelData , 'Groceries' : groceriesData , 'Electronics' : electronicsData , 'Clothing' : clothData , 'Household' : houseData , 'Other' : otherData, 'all' : allExpense})
+
 
 def user(request):
     user=user_profile.objects.filter(Email='nish0349@gmail.com')
@@ -131,6 +133,29 @@ def notification(request):
     return render(request,'examples/notification.html')
 
 def addExpense(request):
+    if request.method=="POST":
+       form=generalexpensesform(request.POST)
+       userr=User.objects.filter(username=request.session['username'])
+       for u in userr:
+           id=u.id
+       if form.is_valid():
+           user=form.save(commit=False)
+           user.user_id_id=id
+           user.date_time=datetime.datetime.now()
+           user.save()
+           message="Successfully Added"
+           form=generalexpensesform()
+           return render(request,'examples/AddExpense.html',{'form':form,'message':message})
+       else:
+           print(form.errors)
+           error=form.errors
+           return render(request,'examples/AddExpense.html',{'error':error})
+    else:
+        form=generalexpensesform()
+        print(form)
+        return render(request,'examples/AddExpense.html',{'form':form})
+
+
     return render(request,'examples/AddExpense.html')
 
 def addMoney(request):

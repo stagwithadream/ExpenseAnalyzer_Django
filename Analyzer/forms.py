@@ -9,8 +9,8 @@ from Analyzer.models import user_profile, general_expenses, mandatory_expenses, 
 class registerform(forms.ModelForm):
 
      password=forms.CharField(widget=forms.PasswordInput())
-     
-       
+
+
 
      class Meta:
         model = User
@@ -47,7 +47,7 @@ class registerform(forms.ModelForm):
      #        cleaned_data['last_name'] = last_name
      #        print(cleaned_data)
      #    return cleaned_data
-      
+
 
      # def clean_username(self):
      #    cleaned_data = self.cleaned_data
@@ -74,8 +74,8 @@ class registerform(forms.ModelForm):
      #    else:
      #        cleaned_data['password'] = password
 
-     #    return cleaned_data       
-  
+     #    return cleaned_data
+
 
 class loginform(forms.ModelForm):
 
@@ -84,3 +84,9 @@ class loginform(forms.ModelForm):
      	model=User
      	fields=('username','password')
 
+class generalexpensesform(forms.ModelForm):
+
+	 class Meta:
+	 	model=general_expenses
+	 	fields=('amount','category','remarks')
+	 	# exclude = ["user_id","T_id","date_time"]

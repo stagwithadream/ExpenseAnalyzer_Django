@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-# from django.utils.timezone import now
+from django.utils.timezone import now
 from datetime import datetime
 
 
@@ -25,7 +25,7 @@ class user_profile(models.Model):
           return self.user.username
 
 class general_expenses(models.Model):
-    T_id=models.IntegerField(primary_key=True)
+    T_id=models.AutoField(primary_key=True)
     user_id=models.ForeignKey(User,  on_delete=models.CASCADE,)
     amount=models.IntegerField()
     date_time=models.DateTimeField(default=datetime.now)
@@ -45,7 +45,7 @@ class general_expenses(models.Model):
 
 
 class mandatory_expenses(models.Model):
-    T_id=models.IntegerField(primary_key=True)
+    T_id=models.AutoField(primary_key=True)
     user_id=models.ForeignKey(User,  on_delete=models.CASCADE,)
     amount=models.IntegerField()
     categories=(
@@ -64,7 +64,7 @@ class mandatory_expenses(models.Model):
 
 
 class debts(models.Model):
-    T_id=models.IntegerField(primary_key=True)
+    T_id=models.AutoField(primary_key=True)
     user_id=models.ForeignKey(User,  on_delete=models.CASCADE,)
     amount=models.IntegerField()
     reciever=models.CharField(max_length=264)
@@ -73,3 +73,8 @@ class debts(models.Model):
     date_time=models.DateTimeField(default=datetime.now)
     def __str__(self):
         return self.T_id
+
+
+# class notifications(models.Model):
+#     N_id=models.AutoField(primary_key=True)
+#     Email=models.ForeignKey
