@@ -93,5 +93,5 @@ class generalexpensesform(forms.ModelForm):
 
 class mandExpense_form(forms.ModelForm):
     class Meta():
-        model=models.mandatory_expenses
-        fields="amount","category","remarks","date"
+        model=mandatory_expenses
+        fields="amount","category","remarks"

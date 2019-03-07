@@ -1,7 +1,6 @@
 {% extends './base_template.html'%}
 
 {% block content %}
-<<<<<<< HEAD
   {% load staticfiles %}
 		<!-- <link rel="stylesheet" href="{% static "assets/css/style.css" %}"> -->
 <div style="margin: 10%">
@@ -26,17 +25,5 @@
 					</div>
 					<button>Add Expense</button>
 </form>
-=======
-<div class="container">
-  <div class="jumbotron">
-    <form  method="post">
-      {{form.as_p}}
-      {% csrf_token %}
-      <input type="submit"  value="Add Expense" class="btn">
-    </form>
-
-  </div>
-
->>>>>>> a7792e3ccf528e116b48070084a4acd8d5b8fd49
 </div>
 {% endblock %}
