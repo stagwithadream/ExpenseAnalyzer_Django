@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Sum
 import datetime
+from django.db.models.functions import Trunc
 # Create your views here.
 
 
@@ -121,31 +122,30 @@ def analyze(request):
     houseData=[]
     otherData=[]
     allData=[]
-    food=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='1').order_by('date_time')
+    food=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='1').annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
     for f in food:
-        foodData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    # return HttpResponse(foodData)
-    travel=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='2').order_by('date_time')
-    for d in travel:
-        travelData.append({'x' : d.date_time.month , 'y' : d.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    groceries=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='3').order_by('date_time')
+        foodData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
+    travel=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='2').annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
+    for f in travel:
+        travelData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
+    groceries=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='3').annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
     for f in groceries:
-        groceriesData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    electronics=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='4').order_by('date_time')
+        groceriesData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
+    electronics=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='4').annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
     for f in electronics:
-        elecData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    cloth=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='5').order_by('date_time')
+        elecData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
+    cloth=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='5').annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
     for f in cloth:
-        clothData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    house=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='6').order_by('date_time')
+        clothData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
+    house=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='6').annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
     for f in house:
-        houseData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    other=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='7').order_by('date_time')
+        houseData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
+    other=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).filter(category='7').annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
     for f in other:
-        otherData.append({'x' : f.date_time.month , 'y' : f.amount , 'toolTipContent' : f.date_time.strftime('%c') + ': {y}' })
-    all=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).order_by('date_time')
+        otherData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
+    all=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
     for f in all:
-        allData.append({'x' : f.date_time.month , 'y' : f.amount, 'toolTipContent' : f.date_time.strftime('%c') + ': {y}'  })
+        allData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
     return render(request,'examples/analyze.html',{'food':foodData, 'travel' : travelData , 'Groceries' : groceriesData , 'Electronics' : elecData , 'Clothing' : clothData , 'Household' : houseData , 'Other' : otherData, 'all' : allData,'dateFrom' : dateFrom , 'dateTo' : dateTo})
 
 

@@ -56,7 +56,7 @@ document.getElementById('category').style.display='block';document.getElementByI
 		   {% for data in Date %}
 
 		 	     <tr>
-		 	       <td>{{data.T_id}}</td>
+		 	       <td>{{data.date_time}}</td>
 		 	       <td>{{data.amount}}</td>
 		 	       <td>{{data.category}}</td>
 		 	       <td>{{data.remarks}}</td>
@@ -71,14 +71,14 @@ document.getElementById('category').style.display='block';document.getElementByI
 
          {% if amount %}
 	       <table id="customers">
-	       	<tr><th >ID</th>
+	       	<tr><th >Date</th>
 	       	<th>Amount</th>
 	       	<th>Category</th>
 	       	<th >remarks</th></tr>
 		   {% for data in amount %}
 
 		 	     <tr>
-		 	       <td>{{data.T_id}}</td>
+		 	       <td>{{data.date_time}}</td>
 		 	       <td>{{data.amount}}</td>
 		 	       <td>{{data.category}}</td>
 		 	       <td>{{data.remarks}}</td>
