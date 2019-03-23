@@ -95,3 +95,14 @@ class mandExpense_form(forms.ModelForm):
     class Meta():
         model=mandatory_expenses
         fields="amount","category","remarks"
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+class debt_form(forms.ModelForm):
+    class Meta:
+        model=debts
+        fields=("amount", "reciever", "remarks", "Deadline")
+        widgets = {
+            'Deadline': DateInput()
+        }

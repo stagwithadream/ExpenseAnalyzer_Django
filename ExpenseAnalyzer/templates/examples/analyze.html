@@ -92,6 +92,7 @@ var chart = new CanvasJS.Chart("graph", {
 	},
   axisX:{
     labelAngle: -60,
+
   },
   toolTip:{
     enabled: true,
@@ -101,7 +102,7 @@ var chart = new CanvasJS.Chart("graph", {
        verticalAlign: "center",
      },
 	data: [{
-		type: "line",
+		type: "spline",
     name: "Food",
     showInLegend: true,
     visible: document.getElementById('cat')[0].selected,
@@ -109,7 +110,7 @@ var chart = new CanvasJS.Chart("graph", {
         {{ food | safe}}
 	},
   {
-		type: "line",
+		type: "spline",
     name: "Travel",
     showInLegend: true,
     visible: document.getElementById('cat')[1].selected,
@@ -125,7 +126,7 @@ var chart = new CanvasJS.Chart("graph", {
     {{ Groceries | safe }}
 	},
   {
-		type: "line",
+		type: "spline",
     name: "Electronics",
     showInLegend: true,
     visible: document.getElementById('cat')[3].selected,
@@ -133,7 +134,7 @@ var chart = new CanvasJS.Chart("graph", {
     {{ Electronics | safe }}
 	},
   {
-		type: "line",
+		type: "spline",
     name: "Clothing",
     showInLegend: true,
     visible: document.getElementById('cat')[4].selected,
@@ -141,7 +142,7 @@ var chart = new CanvasJS.Chart("graph", {
     {{ Clothing | safe }}
 	},
   {
-		type: "line",
+		type: "spline",
     name: "Household",
     showInLegend: true,
     visible: document.getElementById('cat')[5].selected,
@@ -149,7 +150,7 @@ var chart = new CanvasJS.Chart("graph", {
     {{ Household | safe }}
 	},
   {
-		type: "line",
+		type: "spline",
     name: "Others",
     showInLegend: true,
     visible: document.getElementById('cat')[6].selected,
@@ -157,11 +158,27 @@ var chart = new CanvasJS.Chart("graph", {
     {{ Other | safe }}
 	},
   {
-		type: "line",
+		type: "spline",
     name: "Total",
     showInLegend: true,
     visible: document.getElementById('cat')[7].selected,
 		dataPoints:
+    // [{'x': 152000020 ,
+    //  'label' : '2019/02/03' ,
+    //   'y' : 3000,
+    //  'toolTipContent' :  '{label} : {y}'  },
+    //  {'x': 152000040 ,
+    //   'label' : '2019/02/03' ,
+    //    'y' : 3000,
+    //   'toolTipContent' :  '{label} : {y}'  },
+    //   {'x': 152000080 ,
+    //    'label' : '2019/02/03' ,
+    //     'y' : 3000,
+    //    'toolTipContent' :  '{label} : {y}'  },
+    //    {'x': 152000080,
+    //     'label' : '2019/02/03' ,
+    //      'y' : 3000,
+    //     'toolTipContent' :  '{label} : {y}'  }]
     {{ all | safe }}
 	}]
   });

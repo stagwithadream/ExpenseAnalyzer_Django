@@ -4,12 +4,13 @@ from Analyzer.models import user_profile, general_expenses, mandatory_expenses, 
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
-from Analyzer.forms import registerform,loginform,generalexpensesform,mandExpense_form
+from Analyzer.forms import registerform,loginform,generalexpensesform,mandExpense_form,debt_form
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Sum
-import datetime
+import datetime, time
 from django.db.models.functions import Trunc
+
 # Create your views here.
 
 
@@ -84,25 +85,56 @@ def summary(request):
     summar_dict={'Date':Date_spentodrer,'amount':Amount_order,'category':Category_order,'total':total}
     return render(request,'examples/summary.html',context=summar_dict)
 
-def debts(request):
-    return render(request,'examples/debts.html')
+def debt(request):
+    mandForm=debt_form()
+    # mand_form={'Mandform':mandForm}
+    userr=User.objects.filter(username=request.session['username'])
+    for u in userr:
+        id=u.id
+    DebtExp=debts.objects.filter(user_id=id)
+
+    if request.method=='POST':
+        mandForm=debt_form(request.POST)
+        if mandForm.is_valid():
+            deadline=mandForm.cleaned_data['Deadline']
+            if deadline<datetime.date.today():
+                message="Deadline has passed. Debt can not be processed."
+                # return HttpResponse(message)
+                return render(request, 'examples/debts.html', {'Mandform':mandForm,'message':message, 'MandExp' : DebtExp})
+            user=mandForm.save(commit=False)
+            user.user_id_id=id
+            user.date_time=datetime.datetime.now()
+            user.save()
+            message="Successfully added"
+            return redirect('/Analyzer/debt', {'Mandform':mandForm,'message':message})
+        else:
+            entry=debts.objects.filter(user_id=id).filter(T_id=request.POST.get('id'))
+            entry.delete()
+            return redirect('/Analyzer/debt')
+    return render(request,'examples/debts.html',{'Mandform' : mandForm , 'MandExp' : DebtExp} )
 
 def mandatory(request):
     mandForm=mandExpense_form()
-    mand_form={'Mandform':mandForm}
+    # mand_form={'Mandform':mandForm}
+    userr=User.objects.filter(username=request.session['username'])
+    for u in userr:
+        id=u.id
+    MandExp=mandatory_expenses.objects.filter(user_id=id)
 
     if request.method=='POST':
         mandForm=mandExpense_form(request.POST)
-        userr=User.objects.filter(username=request.session['username'])
-        for u in userr:
-            id=u.id
         if mandForm.is_valid():
             user=mandForm.save(commit=False)
             user.user_id_id=id
             user.save()
-        return dashboard(request)
+            return redirect('/Analyzer/mandatory')
+        else:
+            entry=mandatory_expenses.objects.filter(user_id=id).filter(T_id=request.POST.get('id'))
+            entry.delete()
+            return redirect('/Analyzer/mandatory')
 
-    return render(request,'examples/mandatory.html',mand_form)
+
+    return render(request,'examples/mandatory.html',{'Mandform' : mandForm , 'MandExp' : MandExp})
 
 def analyze(request):
     dateFrom=datetime.datetime.min
@@ -146,11 +178,16 @@ def analyze(request):
     all=general_expenses.objects.filter(user_id=id).filter(date_time__gte=dateFrom,date_time__lte=dateTo).annotate(date=Trunc('date_time','day')).values('date').annotate(Sum('amount')).order_by('date')
     for f in all:
         allData.append({'label' : f['date'].strftime('%Y/%m/%d') , 'y' : f['amount__sum'], 'toolTipContent' : f['date'].strftime('%d/%m/%Y') + ': {y}'  })
+        # return HttpResponse(f['date')
     return render(request,'examples/analyze.html',{'food':foodData, 'travel' : travelData , 'Groceries' : groceriesData , 'Electronics' : elecData , 'Clothing' : clothData , 'Household' : houseData , 'Other' : otherData, 'all' : allData,'dateFrom' : dateFrom , 'dateTo' : dateTo})
 
 
 def notification(request):
-    return render(request,'examples/notification.html')
+    userr=User.objects.filter(username=request.session['username'])
+    for u in userr:
+        id=u.id
+    DebtExp=debts.objects.filter(user_id=id)
+    return render(request,'examples/notification.html', {'noti': DebtExp})
 
 def addExpense(request):
     if request.method=="POST":
