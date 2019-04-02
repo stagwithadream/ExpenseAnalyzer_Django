@@ -4,19 +4,24 @@
 <div class="container">
   <br><br>
   <div class="row">
-  <div class="jumbotron col-xs-5">
+    <div class="alert alert-warning" style="margin:auto;">
+      <p><b>NOTE:</b> These expenses will be added to your account on the start of every month.(1<sup>st</sup>)<br>
+      If you wish to disable any of them, kindly disable them by clicking on stop any time before the start of the month. <br>
+    You may again add those expenses later from the month you wish to add them.</p>
+      </div>
+  <div class="jumbotron col-xs-4">
     <form  method="post">
       {{Mandform.as_p}}
       {% csrf_token %}
       <input type="submit" value="Add monthly Expense" class="btn">
     </form>
     </div>
-    <div class="col-xs-7">
-      <table class="table table-striped table-responsive table-bordered" style="margin:30px;width:80%">
+    <div class="col-xs-8">
+      <table class="table table-striped table-responsive" style="margin:30px; width:100%;">
         <tr>
           <th> Expense Amount </th>
           <th>Remarks </th>
-          <th>Stop</th>
+          <th>Disable</th>
         </tr>
         {% for entry in MandExp %}
         <tr>

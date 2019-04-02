@@ -6,10 +6,10 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
 from Analyzer.forms import registerform,loginform,generalexpensesform,mandExpense_form,debt_form
 from django.urls import reverse
-from django.contrib.auth.models import User
 from django.db.models import Sum
 import datetime, time
 from django.db.models.functions import Trunc
+from datetime import date
 
 # Create your views here.
 
@@ -17,6 +17,7 @@ from django.db.models.functions import Trunc
 
 def dashboard(request):
     userr=User.objects.filter(username=request.session['username']);
+    now=datetime.datetime.now()
     for i in userr:
         id=i.id
     foodData=[0,0,0,0,0,0,0,0,0,0,0,0]
@@ -56,7 +57,7 @@ def dashboard(request):
             otherData[i-1]=other['amount__sum']
     allExpense=[0,0,0,0,0,0,0,0,0,0,0,0]
     for i in range(1,13):
-        all=general_expenses.objects.filter(date_time__month=i).filter(user_id=id).aggregate(Sum('amount'))
+        all=general_expenses.objects.filter(date_time__month=i).filter(date_time__year=now.year).filter(user_id=id).aggregate(Sum('amount'))
         if all['amount__sum'] is not None:
             allExpense[i-1]=all['amount__sum']
     return render(request,'examples/dashboard.html',{'food':foodData, 'travel' : travelData , 'Groceries' : groceriesData , 'Electronics' : electronicsData , 'Clothing' : clothData , 'Household' : houseData , 'Other' : otherData, 'all' : allExpense})
@@ -266,6 +267,37 @@ def login(request):
         form=loginform()
         print(form)
         return render(request,'examples/login.html',{'form':form})
+
+
+def mandTask(request):
+    userr=User.objects.filter(username=request.session['username'])
+    for u in userr:
+        if (u.is_superuser == 1):
+            today=datetime.datetime.now()
+            today=today.strftime('%d')
+            if (today == '01'):
+                expenses=mandatory_expenses.objects.all()
+                for exp in expenses:
+                    general_expenses.objects.create(user_id=exp.user_id, amount=exp.amount,category=exp.category,remarks=exp.remarks)
+                return HttpResponse('Expenses added for this month')
+        else:
+            return HttpResponse('You are not authorized to access this page')
+
+def sendNotification(request):
+    userr=User.objects.filter(username=request.session['username'])
+    for u in userr:
+        if (u.is_superuser == 1):
+            today=datetime.datetime.now()
+            dbts=debts.objects.all()
+            data=[]
+            for d in dbts:
+                if (today.date()>=d.Deadline):
+                    daysLeft=today.date()-d.Deadline
+                    # if (daysLeft.days%7 == 0): then send mail
+                    data.append({d.remarks: daysLeft})
+            return HttpResponse(data)
+        else:
+            return HttpResponse('You are not authorized to access this page')
 
 
 

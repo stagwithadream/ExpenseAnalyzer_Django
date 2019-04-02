@@ -20,7 +20,9 @@ urlpatterns = [
     path('analyze/',views.analyze,name='analyze'),
     path('notification/',views.notification,name='notification'),
     path('AddExpense/',views.addExpense,name='AddExpense'),
-    path('AddMoney/',views.addMoney,name='AddMoney')
+    path('AddMoney/',views.addMoney,name='AddMoney'),
+    path('mandTask/', views.mandTask, name='mandTask'),
+    path('sendNotification/', views.sendNotification, name='sendNotification'),
 
 
 ]
