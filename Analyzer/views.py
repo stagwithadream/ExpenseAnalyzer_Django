@@ -10,7 +10,8 @@ from django.db.models import Sum
 import datetime, time
 from django.db.models.functions import Trunc
 from datetime import date
-
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
 
 
@@ -277,6 +278,19 @@ def mandTask(request):
             today=today.strftime('%d')
             if (today == '01'):
                 expenses=mandatory_expenses.objects.all()
+                Rcpt=set()
+                for exp in expenses:
+                    us=User.objects.filter(id=exp.user_id_id)
+                    for r in us:
+                        Rcpt.add(r.email)
+                subject = 'Mandatory Expenses:EXPENSE ANALYZER'
+                message = 'This is a reminder mail. Your list of mandatory expenses will be added to your expenses tomorrow. In case of any changes, deletions or additions kindly modify the mandatory expenses tab in your account accordingly.'
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [list(Rcpt)]
+                send_mail( subject, message, email_from, recipient_list, fail_silently=False )
+                return HttpResponse('Mails sent as reminders')
+            if (today == '02'):
+                expenses=mandatory_expenses.objects.all()
                 for exp in expenses:
                     general_expenses.objects.create(user_id=exp.user_id, amount=exp.amount,category=exp.category,remarks=exp.remarks)
                 return HttpResponse('Expenses added for this month')
@@ -291,11 +305,21 @@ def sendNotification(request):
             dbts=debts.objects.all()
             data=[]
             for d in dbts:
-                if (today.date()>=d.Deadline):
-                    daysLeft=today.date()-d.Deadline
-                    # if (daysLeft.days%7 == 0): then send mail
-                    data.append({d.remarks: daysLeft})
-            return HttpResponse(data)
+                if (today.date()<=d.Deadline):
+                    daysLeft=d.Deadline - today.date()
+                    if (daysLeft.days%7 == 0):
+                        #Getting email of recipient
+                        # return HttpResponse(d.user_id_id)
+                        u=User.objects.filter(id=d.user_id_id)
+                        for us in u:
+                            em=us.email
+                        subject = 'Debt! : EXPENSE ANALYZER '
+                        message = 'This is a reminder mail. You need to pay an amount of Rs. ' + str(d.amount) +' to ' + str(d.reciever) + ' by ' + str(d.Deadline) +'.'
+                        email_from = settings.EMAIL_HOST_USER
+                        recipient_list = [em]
+                        send_mail( subject, message, email_from, recipient_list, fail_silently=False )
+                        print('Mail sent to '+ em)
+            return HttpResponse('Notifications sent')
         else:
             return HttpResponse('You are not authorized to access this page')
 
