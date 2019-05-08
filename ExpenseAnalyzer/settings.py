@@ -28,6 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'selabworkgroup7@gmail.com'
+EMAIL_HOST_PASSWORD = 'Nishtha23101998'
 
 # Application definition
 
@@ -78,10 +84,12 @@ WSGI_APPLICATION = 'ExpenseAnalyzer.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Expense_Analyzer',
         'USER' : 'root',
-        'PASSWORD' : 'root123',
+        'PASSWORD' : '',
         'HOST' : 'localhost',
         'PORT' : '3306',
     }
@@ -90,6 +98,12 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    # 'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    # 'django.contrib.auth.hashers.Argon2PasswordHasher',
+    # 'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -107,6 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -118,7 +133,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -128,3 +143,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     STATIC_DIR,
 ]
+LOGIN_REDIRECT_URL = '/'

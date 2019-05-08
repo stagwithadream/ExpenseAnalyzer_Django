@@ -1,7 +1,9 @@
 from django.contrib import admin
-from . import models
+from Analyzer.models import user_profile,general_expenses,mandatory_expenses,debts
+
 # Register your models here.
-admin.site.register(models.general_expenses)
-admin.site.register(models.mandatory_expenses)
-admin.site.register(models.debts)
-admin.site.register(models.user_profile)
+admin.site.register(user_profile)
+admin.site.register(general_expenses)
+admin.site.register(mandatory_expenses)
+admin.site.register(debts)
+# admin.site.register(notifications)

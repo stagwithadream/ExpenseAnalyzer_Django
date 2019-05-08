@@ -1,5 +1,45 @@
 {% extends './base_template.html'%}
 
 {% block content %}
-DEBTS
+<div class="container">
+  <br><br>
+  <div class="row">
+  <div class="jumbotron col-xs-5">
+    {{message}}
+    <h4>Add a debt</h4>
+    <form  method="POST" action="{% url 'debt' %}">
+      {{Mandform.as_p}}
+      {% csrf_token %}
+      <input type="submit" value="Add Debt" class="btn">
+    </form>
+    </div>
+    <div class="col-xs-7">
+      <br><br><br>
+      <h4>Currently pending debts</h4>
+      <table class="table table-striped table-responsive table-bordered" style="margin:20px;width:100%">
+        <tr>
+          <th> Debt Amount </th>
+          <th> Receiver </th>
+          <th>Remarks </th>
+          <th>Deadline </th>
+          <th>Paid </th>
+        </tr>
+        {% for entry in MandExp %}
+        <tr>
+          <td> {{entry.amount}} </td>
+          <td>  {{entry.reciever}} </td>
+          <td>{{entry.remarks}}</td>
+          <td>{{entry.Deadline}}</td>
+          <form method="POST" action="{% url 'debt'%}" name="remove_expense">
+            {% csrf_token %}
+            <input hidden value="{{entry.T_id}}" type="text" name="id">
+          <td><button type="submit" class="btn btn-danger"> PAID</button></td>
+          </form>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+</div>
+</div>
 {% endblock %}

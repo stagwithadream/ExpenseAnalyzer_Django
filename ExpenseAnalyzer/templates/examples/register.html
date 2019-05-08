@@ -1,0 +1,67 @@
+
+
+
+  <!DOCTYPE html>
+  {% load staticfiles %}
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExpenseAnalyzer</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!--MATERIAL DESIGN ICONIC FONT-->
+		<link rel="stylesheet" href="{% static "assets/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css" %}">
+		
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href="{% static "assets/css/style.css" %}">
+		<style>
+			.inner{
+				/*background-image: url("{% static "assets/img/registration-form-2.jpg" %}");*/
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="wrapper" style="background-image: url('{% static "assets/img/bg-registration-form-2.jpg"  %}');">
+			<div class="inner">
+				<form method="POST">
+					{% csrf_token %}
+					<h3>Registration Form</h3>
+					
+
+					<div class="form-group">
+						<div class="form-wrapper">
+							<label for="id_first_name">First name</label>
+							<div>{{error.first_name}}</div>
+							<input type="text" class="form-control" name="first_name">
+						</div>
+						<div class="form-wrapper">
+							<label for="id_last_name">Last Name</label>
+							<div>{{error.last_name}}</div>
+							<input type="text" class="form-control" name="last_name">
+						</div>
+					</div>
+					<div class="form-wrapper">
+						<label for="id_email">Email</label><div>{{error.email}}</div>
+						<input type="text" class="form-control" name="email">
+					</div>
+					<div class="form-wrapper">
+						<label for="id_username">Username</label>
+						<div>{{error.username}}</div>
+						<input type="text" class="form-control" name="username">
+					</div>
+					<div class="form-wrapper">
+						<label for="id_password">Password</label>
+						<div>{{error.password}}</div>
+						<input type="password" class="form-control" name="password">
+					</div>
+					<button>Register Now</button>
+				</form>
+			<a href="{% url 'login' %}">Already an User?Login</a>
+			</div>
+		</div>
+			<p>bfhbfh</p>
+		
+	</body>
+</html>

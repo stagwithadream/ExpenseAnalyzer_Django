@@ -1,0 +1,46 @@
+
+
+ <!DOCTYPE html>
+  {% load staticfiles %}
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExpenseAnalyzer</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!--MATERIAL DESIGN ICONIC FONT-->
+		<link rel="stylesheet" href="{% static "assets/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css" %}">
+		
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href="{% static "assets/css/style.css" %}">
+		<style>
+			.inner{
+				/*background-image: url("{% static "assets/img/registration-form-2.jpg" %}");*/
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="wrapper" style="background-image: url('{% static "assets/img/bg-registration-form-2.jpg"  %}');">
+			<div class="inner">
+				<form method="POST">
+					{% csrf_token %}
+					<h3>Login Form</h3>
+					{{error}}
+					<div class="form-wrapper">
+						<label for="id_username">Username</label>
+						<input type="text" class="form-control" name="username">
+					</div>
+					<div class="form-wrapper">
+						<label for="">Password</label>
+						<input type="password" class="form-control" name="password">
+					</div>
+					<button>Login</button>
+				</form>
+			 <a href="{% url 'register' %}">New User?REGISTER HERE</a> 
+		</div>
+		
+	</body>
+	<!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
